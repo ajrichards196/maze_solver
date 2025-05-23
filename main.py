@@ -28,6 +28,10 @@ def main():
     cell_a.draw(80,160, 80, 160)
     cell_b = Cell(win)
     cell_b.draw(160, 240, 160, 240)
+    cell_c = Cell(win)
+    cell_c.draw(240,320, 80, 160)
+    cell_a.draw_move(to_cell=cell_b)
+    cell_b.draw_move(cell_c)
     win.wait_for_close()
 
 if __name__ == "__main__":
