@@ -1,20 +1,33 @@
 from window import Window, Point, Line
+from cell import Cell
 
-lines = [
-    {"point_a": [80, 60], "point_b": [180, 160], "colour": "blue"},
-    {"point_a": [800, 600], "point_b": [0, 0], "colour": "red"},
-    {"point_a": [400, 300], "point_b": [800, 0], "colour": "green"},
+x1 = 80
+x2 = 160
+y1 = 80
+y2 = 160
+lines = [    
+    #left wall
+    {"point_a": [x1, y1], "point_b": [x1, y2], "colour": "blue"},
+    #right wall
+    {"point_a": [x2, y1], "point_b": [x2, y2], "colour": "red"},
+    #top wall
+    {"point_a": [x1, y1], "point_b": [x2, y1], "colour": "green"},
+    #bottom wall
+    {"point_a": [x1, y2], "point_b": [x2, y2], "colour": "black"},
 ]
 
 def main():
     win = Window(800,600)
-    for line in lines:
-        point_a = Point(line["point_a"][0], line["point_a"][1])
-        point_b = Point(line["point_b"][0], line["point_b"][1])
-        line_to_draw = Line(point_a=point_a, point_b=point_b)
-        win.draw_line(line=line_to_draw, fill_colour=line["colour"])
+    # for line in lines:
+    #     point_a = Point(line["point_a"][0], line["point_a"][1])
+    #     point_b = Point(line["point_b"][0], line["point_b"][1])
+    #     line_to_draw = Line(point_a=point_a, point_b=point_b)
+    #     win.draw_line(line=line_to_draw, fill_colour=line["colour"])
 
-
+    cell_a = Cell(win)
+    cell_a.draw(80,160, 80, 160)
+    cell_b = Cell(win)
+    cell_b.draw(160, 240, 160, 240)
     win.wait_for_close()
 
 if __name__ == "__main__":
