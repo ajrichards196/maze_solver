@@ -1,6 +1,7 @@
 import unittest
 
 from maze import Maze
+from window import Window
 
 class Tests(unittest.TestCase):
     def test_maze_create_cells_1210(self):
@@ -29,17 +30,24 @@ class Tests(unittest.TestCase):
             num_rows
         )
 
-    def test_maze_create_cells_20003000(self):
-        num_cols = 2000
-        num_rows = 3000
+    def test_maze_break_entrance(self):
+        num_cols = 3
+        num_rows = 3
+        #win = Window(800,800)
         m1 = Maze(0,0,num_rows, num_cols,10,10)
-        self.assertEqual(
-            len(m1._Maze__cells),
-            num_cols,
+  
+        self.assertFalse(
+            m1._Maze__cells[0][0].has_top_wall
         )
-        self.assertEqual(
-            len(m1._Maze__cells[0]),
-            num_rows
+
+    def test_maze_break_exit(self):
+        num_cols = 3
+        num_rows = 3
+        #win = Window(800,800)
+        m1 = Maze(0,0,num_rows, num_cols,10,10)
+
+        self.assertFalse(
+            m1._Maze__cells[-1][-1].has_bottom_wall
         )
 
 if __name__ == "__main__":
