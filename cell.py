@@ -68,8 +68,7 @@ class Cell:
                 to_cell.__x2 - ((to_cell.__x2 - to_cell.__x1) / 2),
                 to_cell.__y2 - ((to_cell.__y2 - to_cell.__y1) / 2)
             )
-
             line = Line(point_a=centre_start, point_b=centre_end)
             self.__win.draw_line(line=line, fill_colour=colour)
-            print(centre_start.x, centre_start.y, centre_end.x, centre_end.y)
+
 

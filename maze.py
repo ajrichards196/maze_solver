@@ -27,6 +27,7 @@ class Maze:
         self.__create_cells()
         self.__break_entrance_and_exit()
         self.__break_walls_r(0,0)
+        self.__reset_cells_visited()
 
     def __create_cells(self):
         for i in range(0, self.num_cols):
@@ -50,7 +51,7 @@ class Maze:
     def _animate(self):
         if self.win:
             self.win.redraw()
-            time.sleep(0.15)
+            time.sleep(0.05)
 
     def __break_entrance_and_exit(self):
         entrance = self.__cells[0][0]
@@ -81,7 +82,7 @@ class Maze:
                 cell_right = self.__cells[i+1][j]
                 if not cell_right.visited:
                     visit.append([i+1, j, 'right'])
-            print(i,j, visit)
+
             if not visit:
                 self.__draw_cell(i,j)
                 return
@@ -90,13 +91,92 @@ class Maze:
             direction = next_cell[2]
             if direction == 'top':
                 current_cell.has_top_wall = False
+                self.__cells[i][j-1].has_bottom_wall = False
             if direction == 'bottom':
                 current_cell.has_bottom_wall = False
+                self.__cells[i][j+1].has_top_wall = False
             if direction == 'left':
                 current_cell.has_left_wall = False
+                self.__cells[i-1][j].has_right_wall = False
             if direction == 'right':
                 current_cell.has_right_wall = False
+                self.__cells[i+1][j].has_left_wall = False
             self.__draw_cell(i,j)
             self.__break_walls_r(next_cell[0], next_cell[1])
+
+    def __reset_cells_visited(self):
+        for cells in self.__cells:
+            for cell in cells:
+                cell.visited = False
+
+    def solve(self):
+        return self._solve_r(0,0)
+    
+    def _solve_r(self, i, j):
+        end_x = self.num_cols -1
+        end_y = self.num_rows -1
+        current_cell = self.__cells[i][j]
+        self._animate()
+        current_cell.visited = True
+        if i == end_x and j == end_y:
+            return True
+        #check left        
+        if i > 0:
+            cell_left = self.__cells[i-1][j]            
+            if (
+                not current_cell.has_left_wall 
+                and not cell_left.has_right_wall
+                and not cell_left.visited
+            ):
+                current_cell.draw_move(cell_left)
+                if self._solve_r(i=i-1, j=j):
+                    return True
+                else:
+                    current_cell.draw_move(cell_left, undo=True)
+
+        #check right
+        if i < self.num_cols-1:
+            cell_right = self.__cells[i+1][j]
+            if (
+                not current_cell.has_right_wall
+                and not cell_right.has_left_wall
+                and not cell_right.visited
+            ):
+                current_cell.draw_move(cell_right)
+                if self._solve_r(i=i+1, j=j):
+                    return True
+                else:
+                    current_cell.draw_move(cell_right, undo = True)
+
+        #check top 
+        if j > 0:
+            cell_above = self.__cells[i][j-1]
+            if (
+                not current_cell.has_top_wall
+                and not cell_above.has_bottom_wall
+                and not cell_above.visited
+            ):
+                current_cell.draw_move(cell_above)
+                if self._solve_r(i=i, j=j-1):
+                    return True
+                else:
+                    current_cell.draw_move(cell_above, undo = True)
+
+        #check bottom
+        if j < self.num_rows -1:
+            cell_below = self.__cells[i][j+1]
+            if (
+                not current_cell.has_bottom_wall
+                and not cell_below.has_top_wall
+                and not cell_below.visited
+            ):
+                current_cell.draw_move(cell_below)
+                if self._solve_r(i=i, j=j+1):
+                    return True
+                else:
+                    current_cell.draw_move(cell_below, undo = True)
+
+        return False
+
                 
 
